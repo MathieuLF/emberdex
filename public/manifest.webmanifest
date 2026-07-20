@@ -1,0 +1,17 @@
+{
+  "name": "Emberdex",
+  "short_name": "Emberdex",
+  "description": "Suivi privé de parties Nuzlocke, édition de packs et préparation aux combats.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#07111d",
+  "theme_color": "#7df7d3",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}

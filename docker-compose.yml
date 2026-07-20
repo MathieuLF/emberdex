@@ -1,0 +1,21 @@
+services:
+  emberdex:
+    build:
+      context: .
+      args:
+        NEXT_DEPLOYMENT_ID: ${NEXT_DEPLOYMENT_ID:-}
+    container_name: emberdex
+    ports:
+      - "3080:3000"
+    volumes:
+      - emberdex-data:/app/data
+    environment:
+      OWNER_NAME: ${OWNER_NAME:-Emberdex Keeper}
+      OWNER_PASSWORD: ${OWNER_PASSWORD:?Set OWNER_PASSWORD in your .env file before starting Emberdex}
+      AUTH_SECRET: ${AUTH_SECRET:?Set AUTH_SECRET in your .env file before starting Emberdex}
+      EMBERDEX_DATA_DIR: /app/data
+    restart: unless-stopped
+
+volumes:
+  emberdex-data:
+    driver: local
