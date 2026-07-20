@@ -20,6 +20,11 @@ import { postJson } from "@/lib/client-api";
 import { cachedPokemonAssetUrl, missingPokemonSpriteUrl } from "@/lib/pokemon-assets";
 import { Button, Card, Input, SectionHeading, Select, StatCard, Textarea, Divider, Pill } from "@/components/ui";
 import {
+  formatEncounterOutcome,
+  formatRuleMode,
+  formatRuleModeState,
+} from "@/lib/rule-labels";
+import {
   Check,
   Loader2,
   RefreshCw,
@@ -88,6 +93,8 @@ const outcomeOptions = [
   { value: "gift", label: "Reçu" },
   { value: "fainted", label: "Mis K.O." },
 ] as const;
+
+const SPECIAL_ENCOUNTER_ROUTE = "Starter ou offert";
 
 const typeChart: Record<string, Record<string, number>> = {
   normal: { rock: 0.5, ghost: 0, steel: 0.5 },
@@ -229,7 +236,7 @@ function renderEventDescription(event: RunEvent, party: PokemonSlot[]) {
       const payload = event.payload;
       const speciesName = capitalize(payload.species ?? "Pokémon inconnu");
       return payload.outcome === "gift"
-        ? `${speciesName} choisi comme starter à ${payload.routeName}`
+        ? `${speciesName} reçu à ${payload.routeName}`
         : `${speciesName} rencontré sur ${payload.routeName}`;
     }
     case "badge.awarded":
@@ -1243,7 +1250,7 @@ export function RunWorkbench({ run, pack, gameProfile, activeRulesCount }: RunWo
                     </span>
                     <span className="text-[color:var(--muted)]">Rencontre effectuée :</span>
                     <span className="font-semibold text-[color:var(--text)]">
-                      {capitalize(currentZoneEncounter.species)} ({currentZoneEncounter.outcome === "caught" ? "Capturé" : currentZoneEncounter.outcome === "failed" ? "Échoué" : currentZoneEncounter.outcome})
+                      {capitalize(currentZoneEncounter.species)} ({formatEncounterOutcome(currentZoneEncounter.outcome)})
                     </span>
                   </div>
                   {currentZoneEncounter.shiny && <span className="text-[color:var(--warning)] font-semibold">Shiny</span>}
@@ -1343,12 +1350,12 @@ export function RunWorkbench({ run, pack, gameProfile, activeRulesCount }: RunWo
             onClick={() => {
               setEncounter((c) => ({
                 ...c,
-                routeName: "Starter / Cadeau",
+                routeName: SPECIAL_ENCOUNTER_ROUTE,
               }));
               setIsEncounterOpen(true);
             }}
           >
-            <Plus className="h-3.5 w-3.5" /> Autre rencontre (Cadeau/Starter)
+            <Plus className="h-3.5 w-3.5" /> Ajouter une rencontre spéciale
           </Button>
 
           <Button
@@ -1380,7 +1387,7 @@ export function RunWorkbench({ run, pack, gameProfile, activeRulesCount }: RunWo
             <Card className="w-full max-w-2xl border border-[color:var(--danger)]/40 bg-[#0b1726] p-6 shadow-[var(--shadow)] sm:p-8">
               <div className="flex items-start justify-between gap-4 border-b border-[color:var(--line)] pb-4">
                 <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[color:var(--danger)]">Override requis</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--danger)]">Exception requise</p>
                   <h2 className="mt-2 text-xl font-semibold text-[color:var(--text)]">Cette action enfreint les règles actives</h2>
                   <p className="mt-1 text-sm leading-6 text-[color:var(--muted)]">
                     L’action peut être enregistrée, mais Emberdex gardera une exception auditée avec votre raison.
@@ -1487,7 +1494,7 @@ export function RunWorkbench({ run, pack, gameProfile, activeRulesCount }: RunWo
                           </option>
                         );
                       })}
-                      <option value="Starter / Cadeau">Starter / Cadeau</option>
+                      <option value={SPECIAL_ENCOUNTER_ROUTE}>{SPECIAL_ENCOUNTER_ROUTE}</option>
                       <option value="custom">Autre lieu...</option>
                     </Select>
                   ) : (
@@ -1551,7 +1558,7 @@ export function RunWorkbench({ run, pack, gameProfile, activeRulesCount }: RunWo
                 </label>
               </div>
 
-              {routeAlreadyVisited && encounter.routeName !== "Starter / Cadeau" && (
+              {routeAlreadyVisited && encounter.routeName !== SPECIAL_ENCOUNTER_ROUTE && (
                 <div className="rounded-lg border border-[color:var(--warning)]/40 bg-[color:var(--warning)]/8 px-3 py-2.5">
                   <p className="text-xs text-[color:var(--warning)] flex items-center gap-1.5 font-semibold">
                     <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
@@ -2560,7 +2567,7 @@ export function RunWorkbench({ run, pack, gameProfile, activeRulesCount }: RunWo
                   <div className="rounded-lg border border-[color:var(--line)] bg-[color:var(--surface-strong)] p-3">
                     <p className="text-[10px] uppercase tracking-[0.18em] text-[color:var(--muted)]">Règles à risque</p>
                     <p className="mt-2 text-lg font-semibold text-[color:var(--text)]">{coachRisks.length}</p>
-                    <p className="mt-1 text-[11px] text-[color:var(--muted)]">{run.ruleMode === "custom" ? "Custom actif" : run.ruleMode === "hardcore" ? "Hardcore actif" : "Standard actif"}</p>
+                    <p className="mt-1 text-[11px] text-[color:var(--muted)]">{formatRuleModeState(run.ruleMode)}</p>
                   </div>
                 </div>
                 <div className="mt-4 space-y-2">
@@ -2790,7 +2797,7 @@ export function RunWorkbench({ run, pack, gameProfile, activeRulesCount }: RunWo
                 {run.rules.levelCaps.policy === "strict" ? <Pill>Limite stricte</Pill> : <Pill>Limite conseillée</Pill>}
                 {run.rules.battle.style === "set" ? <Pill>Mode Set</Pill> : null}
                 {!run.rules.battle.allowBattleItems ? <Pill>Sans objet en combat</Pill> : null}
-                <Pill>{run.ruleMode === "custom" ? "Custom" : run.ruleMode === "hardcore" ? "Hardcore" : "Standard"}</Pill>
+                <Pill>{formatRuleMode(run.ruleMode)}</Pill>
               </div>
               <Divider />
               <div className="space-y-3">

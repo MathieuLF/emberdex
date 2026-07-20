@@ -69,7 +69,7 @@ export default async function RootLayout({
                     <span className="h-3 w-3 rounded-full bg-[color:var(--accent)] shadow-[0_0_28px_var(--glow)]" />
                   </span>
                   <span className="space-y-1">
-                    <span className="block text-sm font-semibold uppercase tracking-[0.28em] text-[color:var(--muted)]">
+                    <span className="block text-sm font-semibold uppercase tracking-[0.14em] text-[color:var(--muted)]">
                       Emberdex
                     </span>
                     <span className="block text-base font-medium text-[color:var(--text)]">

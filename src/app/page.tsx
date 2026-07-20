@@ -13,8 +13,8 @@ export default async function HomePage() {
     <div className="page-reveal space-y-6 max-w-5xl mx-auto py-4">
       {/* 1. Header principal direct */}
       <div className="space-y-2">
-        <Pill>Nuzlocke Active Companion</Pill>
-        <h1 className="font-[family-name:var(--font-display)] text-3xl sm:text-4xl font-bold tracking-tight text-[color:var(--text)]">
+        <Pill tone="accent">Compagnon Nuzlocke actif</Pill>
+        <h1 className="font-[family-name:var(--font-display)] text-3xl sm:text-4xl font-bold text-[color:var(--text)]">
           Tableau de bord Nuzlocke
         </h1>
         <p className="text-sm text-[color:var(--muted)] leading-relaxed">
@@ -46,7 +46,7 @@ export default async function HomePage() {
                 <h4 className="text-xs font-bold uppercase tracking-wider text-[color:var(--accent)]">Espace Propriétaire</h4>
                 <p className="text-xs text-[color:var(--muted)] font-medium">Administration connectée. Gérez vos configurations et sauvegardes.</p>
               </div>
-              <Link href="/admin" className="inline-flex h-9 items-center justify-center rounded-xl bg-[color:var(--surface-strong)] px-4 text-xs font-semibold text-[color:var(--text)] border border-[color:var(--line)] transition hover:border-[color:var(--accent)]">
+              <Link href="/admin" className="inline-flex h-9 items-center justify-center rounded-lg border border-[color:var(--line)] bg-[color:var(--surface-strong)] px-4 text-xs font-semibold text-[color:var(--text)] transition hover:border-[color:var(--accent)]">
                 Ouvrir l'administration
               </Link>
             </div>
@@ -56,7 +56,7 @@ export default async function HomePage() {
                 <h4 className="text-xs font-bold uppercase tracking-wider text-[color:var(--muted)]">Console de gestion</h4>
                 <p className="text-xs text-[color:var(--muted)]">Accédez aux configurations globales d'Emberdex.</p>
               </div>
-              <Link href="/login" className="inline-flex h-9 items-center justify-center rounded-xl border border-[color:var(--line)] px-4 text-xs font-semibold text-[color:var(--text)] transition hover:border-[color:var(--accent)]">
+              <Link href="/login" className="inline-flex h-9 items-center justify-center rounded-lg border border-[color:var(--line)] bg-[color:var(--surface-strong)] px-4 text-xs font-semibold text-[color:var(--text)] transition hover:border-[color:var(--accent)]">
                 Se connecter
               </Link>
             </div>

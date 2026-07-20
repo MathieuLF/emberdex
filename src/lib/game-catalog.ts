@@ -147,7 +147,7 @@ function context(
 const kantoContexts = [
   context("safari-zone", "Safari Zone : une rencontre par zone interne", "safari", "separate"),
   context("fishing-surf", "Pêche et Surf : méthode distincte si activée", "encounter", "separate"),
-  context("static-gifts", "Pokémon offerts et statiques : comptent selon la Gift Clause", "gift", "count"),
+  context("static-gifts", "Pokémon offerts et statiques : comptent pour leur lieu", "gift", "count"),
 ];
 
 const johtoContexts = [
@@ -173,7 +173,7 @@ const unovaContexts = [
   context("striaton-starter", "Striaton : boss déterminé par le starter", "boss", "advisory"),
   context("seasons", "Saisons : noter la saison de capture", "encounter", "advisory"),
   context("hidden-grotto", "Trouées Cachées : non comptabilisées en standard", "encounter", "ignore"),
-  context("gift-clause", "Pokémon offerts en ville : Gift Clause", "gift", "count"),
+  context("gift-clause", "Pokémon offerts en ville : comptent pour leur lieu", "gift", "count"),
 ];
 
 const kalosContexts = [
@@ -972,13 +972,13 @@ export const GAME_CATALOG: GameProfile[] = [
   game("soulsilver", "Pokémon SoulSilver", "heartgold-soulsilver", 4, "New Bark Town", STARTER_SETS.johto, "johto",
     ["Pokémon compagnon (suiveur) ne compte pas", "Concours de Capture d'Insecte = rencontre propre", "Safari Zone par zone = rencontre propre"]),
   game("black",   "Pokémon Black",   "black-white", 5, "Nuvema Town", STARTER_SETS.unova, "unova",
-    ["Pokémon offerts en ville = rencontre de leur lieu (Gift Clause)", "Trouées Cachées non comptabilisées en standard", "Saisons changent les rencontres : notez la saison de capture"]),
+    ["Pokémon offerts en ville = rencontre de leur lieu", "Trouées Cachées non comptabilisées en standard", "Saisons changent les rencontres : notez la saison de capture"]),
   game("white",   "Pokémon White",   "black-white", 5, "Nuvema Town", STARTER_SETS.unova, "unova",
-    ["Pokémon offerts en ville = rencontre de leur lieu (Gift Clause)", "Trouées Cachées non comptabilisées en standard", "Saisons changent les rencontres : notez la saison de capture"]),
+    ["Pokémon offerts en ville = rencontre de leur lieu", "Trouées Cachées non comptabilisées en standard", "Saisons changent les rencontres : notez la saison de capture"]),
   game("black-2", "Pokémon Black 2", "black-2-white-2", 5, "Aspertia City", STARTER_SETS.unova, "unova2",
-    ["Gift Clause active", "Trouées Cachées non comptabilisées", "Pokémon World Tournament non applicable"]),
+    ["Pokémon offerts comptés pour leur lieu", "Trouées Cachées non comptabilisées", "Pokémon World Tournament non applicable"]),
   game("white-2", "Pokémon White 2", "black-2-white-2", 5, "Aspertia City", STARTER_SETS.unova, "unova2",
-    ["Gift Clause active", "Trouées Cachées non comptabilisées", "Pokémon World Tournament non applicable"]),
+    ["Pokémon offerts comptés pour leur lieu", "Trouées Cachées non comptabilisées", "Pokémon World Tournament non applicable"]),
   game("x", "Pokémon X", "x-y", 6, "Vaniville Town", STARTER_SETS.kalos, "kalos",
     ["Safari des Amis = rencontres distinctes par safari ami", "Horde : première espèce visible seulement", "Fossile = cadeau libre"]),
   game("y", "Pokémon Y", "x-y", 6, "Vaniville Town", STARTER_SETS.kalos, "kalos",

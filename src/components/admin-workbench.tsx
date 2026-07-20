@@ -6,6 +6,7 @@ import { type AppState, type ContentPack, type RuleMode, type RuleSet, type Rule
 import { postJson } from "@/lib/client-api";
 import { Button, Card, Divider, Input, Pill, SectionHeading, Select, StatCard, Textarea } from "@/components/ui";
 import { Loader2, Download, Upload, Paintbrush, FileJson, Plus, Trash2, RotateCcw, Save } from "lucide-react";
+import { formatRuleMode, formatRunStatus } from "@/lib/rule-labels";
 
 type AdminWorkbenchProps = {
   state: AppState;
@@ -74,15 +75,6 @@ function ThemeInput({
       <Input value={value} onChange={(event) => onChange(event.target.value)} />
     </label>
   );
-}
-
-function formatStatus(status: "active" | "paused" | "completed" | "failed") {
-  return {
-    active: "Active",
-    paused: "En pause",
-    completed: "Terminée",
-    failed: "Échouée",
-  }[status] ?? status;
 }
 
 function formatDate(value?: string) {
@@ -529,7 +521,7 @@ export function AdminWorkbench({ state }: AdminWorkbenchProps) {
                     <div key={template.id} className="rounded-xl border border-[color:var(--line)] bg-[color:var(--surface-strong)] p-4">
                       <div className="flex flex-wrap items-center gap-2">
                         <p className="font-semibold text-[color:var(--text)]">{template.name}</p>
-                        <Pill>{template.baseMode}</Pill>
+                        <Pill>{formatRuleMode(template.baseMode)}</Pill>
                         {template.gameId ? <Pill>{template.gameId}</Pill> : <Pill>Global</Pill>}
                       </div>
                       <p className="mt-1 text-sm leading-6 text-[color:var(--muted)]">{template.description}</p>
@@ -585,7 +577,7 @@ export function AdminWorkbench({ state }: AdminWorkbenchProps) {
                 >
                   <option value="standard">Standard</option>
                   <option value="hardcore">Hardcore</option>
-                  <option value="custom">Custom</option>
+                  <option value="custom">Personnalisé</option>
                 </Select>
               </label>
             </div>
@@ -661,7 +653,7 @@ export function AdminWorkbench({ state }: AdminWorkbenchProps) {
                     <th className="py-3 px-4 font-semibold">Jeu</th>
                     <th className="py-3 px-4 font-semibold">Statut</th>
                     <th className="py-3 px-4 font-semibold">En vie / K.O.</th>
-                    <th className="py-3 px-4 font-semibold">Badges</th>
+                    <th className="py-3 px-4 font-semibold">Étapes validées</th>
                     <th className="py-3 px-4 font-semibold">Dernière activité</th>
                     <th className="py-3 px-4 font-semibold text-right">Actions</th>
                   </tr>
@@ -686,7 +678,7 @@ export function AdminWorkbench({ state }: AdminWorkbenchProps) {
                                 ? "bg-[color:var(--accent)]/10 text-[color:var(--accent)] border border-[color:var(--accent)]/20"
                                 : "bg-[color:var(--muted)]/10 text-[color:var(--muted)] border border-[color:var(--line)]"
                           }`}>
-                            {formatStatus(run.status)}
+                            {formatRunStatus(run.status)}
                           </span>
                         </td>
                         <td className="py-3 px-4">
