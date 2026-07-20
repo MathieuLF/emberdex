@@ -26,6 +26,7 @@ import { getAppStatePath, getDataRoot } from "./paths";
 import { mergeTheme } from "./theme";
 import { getOwnerDisplayName } from "./auth";
 import { getGameById, getGameForRun, getStarterById, type PlayerRunSetup } from "./game-catalog";
+import { formatRuleMode } from "./rule-labels";
 
 type AppendEventsResult =
   | { ok: true; run: RunSnapshot; evaluation: RuleEvaluation }
@@ -404,7 +405,7 @@ export async function createPlayerRun(setup: PlayerRunSetup) {
     ruleTemplateId: setup.ruleTemplateId,
     currentLocation: game.startingLocation,
   });
-  const modeLabel = run.ruleMode === "custom" ? "Custom" : run.ruleMode === "hardcore" ? "Hardcore" : "Standard";
+  const modeLabel = formatRuleMode(run.ruleMode);
 
   const selectedAt = timestamp();
   const pokemonId = `starter-${randomUUID()}`;

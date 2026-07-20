@@ -4,6 +4,7 @@ import { AlertTriangle, ArrowRight, ShieldCheck, Sparkles, Users, Swords, Info }
 import { Card, Pill } from "@/components/ui";
 import { getGameForRun, resolveBossTeam, STARTERS, type BossSlot, type GameRuleContext } from "@/lib/game-catalog";
 import { pokemonSpriteUrl } from "@/lib/pokemon-assets";
+import { formatContextCategory, formatContextPolicy } from "@/lib/rule-labels";
 
 // ---------------------------------------------------------------------------
 // Type chart for boss weakness analysis (attacker -> defender -> multiplier)
@@ -229,13 +230,13 @@ function SpecialRulesPanel({ rules, activeIds }: { rules: GameRuleContext[]; act
         {rules.map((rule) => (
           <li key={rule.id} className="flex items-start gap-2 text-xs text-[color:var(--muted)]">
             <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--accent)]" />
-            <span>
-              {rule.label}
-              <span className="ml-1 text-[10px] uppercase tracking-[0.14em] text-[color:var(--accent)]">
-                {rule.defaultPolicy}
+              <span>
+                {rule.label}
+              <span className="ml-1 text-[10px] font-semibold text-[color:var(--accent)]">
+                {formatContextCategory(rule.category)} · {formatContextPolicy(rule.defaultPolicy)}
               </span>
               {active.has(rule.id) ? (
-                <span className="ml-1 text-[10px] uppercase tracking-[0.14em] text-[color:var(--success)]">
+                <span className="ml-1 text-[10px] font-semibold text-[color:var(--success)]">
                   actif
                 </span>
               ) : null}
@@ -344,7 +345,7 @@ export function RunGuidance({ run }: { run: RunSnapshot }) {
                   {!journeyComplete ? <Pill>Niv. {milestone.levelCap}</Pill> : null}
                 </div>
                 <p className="mt-5 text-sm font-medium text-[color:var(--accent)]">{journeyComplete ? "Défi accompli" : milestone.objective}</p>
-                <h2 className="mt-1 font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[color:var(--text)]">
+                <h2 className="mt-1 font-[family-name:var(--font-display)] text-3xl font-semibold text-[color:var(--text)]">
                   {journeyComplete ? "Votre aventure principale est complète" : milestone.name}
                 </h2>
                 <p className="mt-3 max-w-2xl text-base leading-7 text-[color:var(--muted)]">

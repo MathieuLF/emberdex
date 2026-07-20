@@ -5,21 +5,13 @@ import { Pill, Card, StatCard } from "@/components/ui";
 import { RunWorkbench } from "@/components/run-workbench";
 import { RunGuidance } from "@/components/run-guidance";
 import { getGameForRun } from "@/lib/game-catalog";
+import { formatRuleMode, formatRunStatus } from "@/lib/rule-labels";
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("fr-CA", {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
-}
-
-function formatRunStatus(status: "active" | "paused" | "completed" | "failed") {
-  return {
-    active: "active",
-    paused: "en pause",
-    completed: "terminée",
-    failed: "échouée",
-  }[status];
 }
 
 export default async function RunPage({
@@ -49,18 +41,18 @@ export default async function RunPage({
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="relative space-y-5">
             <div className="flex flex-wrap gap-2">
-              <Pill>Code {run.id}</Pill>
+              <Pill tone="accent">Code {run.id}</Pill>
               <Pill>{run.gameTitle}</Pill>
-              <Pill>{run.ruleMode === "custom" ? "Custom" : run.ruleMode === "hardcore" ? "Hardcore" : "Standard"}</Pill>
+              <Pill>{formatRuleMode(run.ruleMode)}</Pill>
               <Pill>{pack?.name ?? "Pack personnalisé"}</Pill>
-              <Pill>{formatRunStatus(run.status)}</Pill>
+              <Pill tone={run.status === "active" ? "success" : run.status === "failed" ? "danger" : "default"}>{formatRunStatus(run.status)}</Pill>
             </div>
 
             <div className="max-w-4xl space-y-4">
               <p className="text-[11px] uppercase tracking-[0.34em] text-[color:var(--muted)]">
                 Votre aventure
               </p>
-              <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold tracking-[-0.025em] text-[color:var(--text)] sm:text-5xl lg:text-6xl">
+              <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold text-[color:var(--text)] sm:text-5xl lg:text-6xl">
                 {run.name}
               </h1>
               <p className="max-w-3xl text-lg leading-8 text-[color:var(--muted)]">

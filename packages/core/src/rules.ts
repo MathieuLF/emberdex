@@ -367,7 +367,7 @@ export function evaluateEncounter(
       {
         relatedRuleLabel: "Contexte spécifique",
         explanation: "Les contextes sélectionnés servent à documenter les variantes comme raids, safari, DLC ou rencontres statiques.",
-        suggestedAction: "Activez ce contexte en Custom ou retirez le contexte de la rencontre.",
+        suggestedAction: "Activez ce contexte en mode Personnalisé ou retirez le contexte de la rencontre.",
       }
     ));
   }
@@ -468,7 +468,7 @@ export function evaluateTeamUpdate(
           ? "Un level cap strict bloque l'ajout ou la mise à jour d'un Pokémon actif au-dessus du prochain cap."
           : "Un level cap advisory laisse l'action passer, mais signale que le Pokémon dépasse le prochain repère.",
         suggestedAction: strict
-          ? "Placez ce Pokémon en boîte, baissez le réglage en Custom, ou forcez l'exception avec une raison."
+          ? "Placez ce Pokémon en boîte, baissez le réglage en mode Personnalisé, ou forcez l'exception avec une raison."
           : "Gardez ce Pokémon hors des combats importants ou ajustez le cap si votre variante le permet.",
       }
     ));
@@ -530,7 +530,7 @@ export function evaluateManualRuleCheck(
       "block",
       {
         relatedRuleLabel: "Objets en combat",
-        explanation: "Le mode Hardcore et certains Customs demandent de ne pas utiliser de potion, rappel ou objet similaire pendant un combat.",
+        explanation: "Le mode Hardcore et certaines règles personnalisées demandent de ne pas utiliser de potion, rappel ou objet similaire pendant un combat.",
         suggestedAction: "Enregistrez une exception si l'objet a été utilisé volontairement ou corrigez le check.",
       }
     )]);
@@ -574,7 +574,7 @@ export function evaluateManualRuleCheck(
       {
         relatedRuleLabel: "Contexte spécifique",
         explanation: "Les contextes comme raids, safari, DLC ou rencontres statiques changent souvent le périmètre d'une zone.",
-        suggestedAction: "Gardez ce check comme note d'audit ou ajustez vos règles Custom.",
+        suggestedAction: "Gardez ce check comme note d'audit ou ajustez vos règles personnalisées.",
       }
     )]);
   }

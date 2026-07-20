@@ -39,6 +39,15 @@ import {
   type StarterProfile,
 } from "@/lib/game-catalog";
 import { cn } from "@/lib/cn";
+import {
+  formatContextCategory,
+  formatContextPolicy,
+  formatGiftPolicy,
+  formatLevelCapPolicy,
+  formatRuleDecisionDescription,
+  formatRuleDescriptor,
+  formatRuleMode,
+} from "@/lib/rule-labels";
 
 type CreatedRun = {
   code: string;
@@ -127,7 +136,7 @@ function updateRuleSet(rules: RuleSet, patch: Partial<RuleSet>): RuleSet {
 }
 
 function modeLabel(mode: RuleMode) {
-  return mode === "custom" ? "Custom" : mode === "hardcore" ? "Hardcore" : "Standard";
+  return formatRuleMode(mode);
 }
 
 function templateOriginLabel(template: RuleTemplate) {
@@ -136,6 +145,30 @@ function templateOriginLabel(template: RuleTemplate) {
   }
 
   return isLocalTemplate(template) ? "Local" : "Perso";
+}
+
+function StepHeader({
+  step,
+  total,
+  title,
+  description,
+}: {
+  step: number;
+  total: number;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+      <div>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--accent)]">
+          Étape {step}/{total}
+        </p>
+        <h3 className="mt-1 font-semibold text-[color:var(--text)]">{title}</h3>
+        <p className="text-sm text-[color:var(--muted)]">{description}</p>
+      </div>
+    </div>
+  );
 }
 
 export function PlayerAccess() {
@@ -539,15 +572,14 @@ export function PlayerAccess() {
       />
 
       <div className="mt-7 grid gap-5 xl:grid-cols-[1.35fr_0.65fr]">
-        <form onSubmit={createGame} className="space-y-7 rounded-[1.35rem] border border-[color:var(--accent)]/30 bg-[color:var(--surface-strong)] p-5 sm:p-7">
+        <form onSubmit={createGame} className="space-y-7 rounded-2xl border border-[color:var(--accent)]/30 bg-[color:var(--surface-strong)] p-5 sm:p-7">
           <div className="grid gap-5 md:grid-cols-[0.8fr_1.2fr] md:items-start">
-            <div className="flex items-center gap-3">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[color:var(--accent)] font-[family-name:var(--font-mono-face)] text-sm font-semibold text-[#03121d]">1</span>
-              <div>
-                <h3 className="font-semibold text-[color:var(--text)]">Jeu et starter</h3>
-                <p className="text-sm text-[color:var(--muted)]">Chaque version garde sa progression et ses starters.</p>
-              </div>
-            </div>
+            <StepHeader
+              step={1}
+              total={4}
+              title="Jeu et starter"
+              description="Chaque version garde sa progression et ses starters."
+            />
 
             <div className="space-y-4">
               <label className="block space-y-2">
@@ -574,7 +606,7 @@ export function PlayerAccess() {
                       aria-pressed={selected}
                       onClick={() => setStarterId(starter.id)}
                       className={cn(
-                        "group rounded-2xl border p-4 text-left transition hover:-translate-y-0.5",
+                        "group rounded-xl border p-4 text-left transition hover:-translate-y-0.5",
                         selected
                           ? "border-[color:var(--accent)] bg-[color:var(--accent-soft)] shadow-[0_18px_45px_rgba(0,0,0,0.2)]"
                           : "border-[color:var(--line)] bg-[color:var(--background-alt)] hover:border-[color:var(--accent)]/50"
@@ -594,19 +626,18 @@ export function PlayerAccess() {
           </div>
 
           <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[color:var(--accent)] font-[family-name:var(--font-mono-face)] text-sm font-semibold text-[#03121d]">2</span>
-              <div>
-                <h3 className="font-semibold text-[color:var(--text)]">Template de règles</h3>
-                <p className="text-sm text-[color:var(--muted)]">Choisissez une base, puis adaptez-la si nécessaire.</p>
-              </div>
-            </div>
+            <StepHeader
+              step={2}
+              total={4}
+              title="Template de règles"
+              description="Choisissez une base, puis adaptez-la si nécessaire."
+            />
 
             <div className="grid gap-3 sm:grid-cols-3">
               {([
                 { id: "standard" as const, icon: Gamepad2, title: "Standard", text: "L’essentiel, avec avertissements et souplesse." },
-                { id: "hardcore" as const, icon: Shield, title: "Hardcore", text: "Level caps stricts, Set, aucun objet en combat." },
-                { id: "custom" as const, icon: SlidersHorizontal, title: "Custom", text: "Composez votre propre Nuzlocke à partir des règles concrètes." },
+                { id: "hardcore" as const, icon: Shield, title: "Hardcore", text: "Limites strictes, mode Set, aucun objet en combat." },
+                { id: "custom" as const, icon: SlidersHorizontal, title: "Personnalisé", text: "Composez votre propre Nuzlocke à partir de règles concrètes." },
               ]).map((mode) => {
                 const selected = ruleMode === mode.id;
                 return (
@@ -616,7 +647,7 @@ export function PlayerAccess() {
                     aria-pressed={selected}
                     onClick={() => chooseRuleMode(mode.id)}
                     className={cn(
-                      "flex gap-3 rounded-2xl border p-4 text-left transition hover:-translate-y-0.5",
+                      "flex gap-3 rounded-xl border p-4 text-left transition hover:-translate-y-0.5",
                       selected ? "border-[color:var(--accent)] bg-[color:var(--accent-soft)]" : "border-[color:var(--line)] bg-[color:var(--background-alt)]"
                     )}
                   >
@@ -693,22 +724,21 @@ export function PlayerAccess() {
           </div>
 
           <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[color:var(--accent)] font-[family-name:var(--font-mono-face)] text-sm font-semibold text-[#03121d]">3</span>
-              <div>
-                <h3 className="font-semibold text-[color:var(--text)]">Personnalisation</h3>
-                <p className="text-sm text-[color:var(--muted)]">Les modifications basculent automatiquement en Custom.</p>
-              </div>
-            </div>
+            <StepHeader
+              step={3}
+              total={4}
+              title="Personnalisation"
+              description="Les modifications basculent automatiquement en mode Personnalisé."
+            />
 
-            <div className="rounded-2xl border border-[color:var(--line)] bg-[color:var(--background-alt)] p-4">
+            <div className="rounded-xl border border-[color:var(--line)] bg-[color:var(--background-alt)] p-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <p className="text-sm font-semibold text-[color:var(--text)]">
                   {ruleMode === "custom" ? "Règles personnalisées" : ruleMode === "hardcore" ? "Règles Hardcore" : "Règles Standard"}
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {describeRulePreset(selectedRules).slice(0, 5).map((rule) => (
-                    <Pill key={rule}>{rule}</Pill>
+                    <Pill key={rule}>{formatRuleDescriptor(rule)}</Pill>
                   ))}
                 </div>
               </div>
@@ -747,7 +777,7 @@ export function PlayerAccess() {
                   Shiny autorisés hors zone
                 </label>
                 <label className="block space-y-2 text-sm text-[color:var(--muted)]">
-                  <span>Level caps</span>
+                  <span>Limites de niveau</span>
                   <Select
                     value={customRules.levelCaps.policy}
                     onChange={(event) => patchCustomRules({
@@ -758,13 +788,13 @@ export function PlayerAccess() {
                       },
                     })}
                   >
-                    <option value="advisory">Conseillés</option>
-                    <option value="strict">Stricts</option>
-                    <option value="off">Désactivés</option>
+                    <option value="advisory">{formatLevelCapPolicy("advisory")}</option>
+                    <option value="strict">{formatLevelCapPolicy("strict")}</option>
+                    <option value="off">{formatLevelCapPolicy("off")}</option>
                   </Select>
                 </label>
                 <label className="block space-y-2 text-sm text-[color:var(--muted)]">
-                  <span>Cadeaux</span>
+                  <span>Pokémon offerts</span>
                   <Select
                     value={customRules.firstEncounter.giftPolicy}
                     onChange={(event) => patchCustomRules({
@@ -774,9 +804,9 @@ export function PlayerAccess() {
                       },
                     })}
                   >
-                    <option value="free">Libres</option>
-                    <option value="count">Comptent pour le lieu</option>
-                    <option value="separate">Rencontre séparée</option>
+                    <option value="free">{formatGiftPolicy("free")}</option>
+                    <option value="count">{formatGiftPolicy("count")}</option>
+                    <option value="separate">{formatGiftPolicy("separate")}</option>
                   </Select>
                 </label>
                 <label className="flex items-center gap-3 text-sm text-[color:var(--muted)]">
@@ -804,7 +834,7 @@ export function PlayerAccess() {
                   Wipe permanente
                 </label>
                 <label className="block space-y-2 text-sm text-[color:var(--muted)]">
-                  <span>Rare candies max</span>
+                  <span>Bonbons rares max.</span>
                   <Input
                     type="number"
                     min={0}
@@ -828,7 +858,9 @@ export function PlayerAccess() {
                         />
                         <span>
                           <span className="block text-[color:var(--text)]">{context.label}</span>
-                          <span className="text-xs uppercase tracking-[0.14em] text-[color:var(--accent-secondary)]">{context.category} - {context.defaultPolicy}</span>
+                          <span className="text-xs font-semibold text-[color:var(--accent-secondary)]">
+                            {formatContextCategory(context.category)} · {formatContextPolicy(context.defaultPolicy)}
+                          </span>
                         </span>
                       </label>
                     ))}
@@ -839,25 +871,24 @@ export function PlayerAccess() {
           </div>
 
           <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[color:var(--accent)] font-[family-name:var(--font-mono-face)] text-sm font-semibold text-[#03121d]">4</span>
-              <div>
-                <h3 className="font-semibold text-[color:var(--text)]">Revue finale</h3>
-                <p className="text-sm text-[color:var(--muted)]">Aperçu des règles avant création.</p>
-              </div>
-            </div>
+            <StepHeader
+              step={4}
+              total={4}
+              title="Revue finale"
+              description="Aperçu des règles avant création."
+            />
 
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="rounded-xl border border-[color:var(--line)] bg-[color:var(--background-alt)] p-4">
-                <p className="text-xs uppercase tracking-[0.18em] text-[color:var(--muted)]">Autorisé</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[color:var(--muted)]">Autorisé</p>
                 <p className="mt-2 text-2xl font-semibold text-[color:var(--success)]">{previewCounts.allow}</p>
               </div>
               <div className="rounded-xl border border-[color:var(--line)] bg-[color:var(--background-alt)] p-4">
-                <p className="text-xs uppercase tracking-[0.18em] text-[color:var(--muted)]">Avertissement</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[color:var(--muted)]">Avertissement</p>
                 <p className="mt-2 text-2xl font-semibold text-[color:var(--warning)]">{previewCounts.warn}</p>
               </div>
               <div className="rounded-xl border border-[color:var(--line)] bg-[color:var(--background-alt)] p-4">
-                <p className="text-xs uppercase tracking-[0.18em] text-[color:var(--muted)]">Override requis</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[color:var(--muted)]">Exception requise</p>
                 <p className="mt-2 text-2xl font-semibold text-[color:var(--danger)]">{previewCounts.block}</p>
               </div>
             </div>
@@ -866,10 +897,10 @@ export function PlayerAccess() {
               {preview.map((item) => (
                 <div key={item.id} className={cn("rounded-xl border p-3", statusClasses[item.status])}>
                   <div className="flex items-center justify-between gap-3">
-                    <p className="text-sm font-semibold">{item.label}</p>
-                    <span className="text-[10px] uppercase tracking-[0.16em]">{statusLabels[item.status]}</span>
+                    <p className="text-sm font-semibold">{formatRuleDescriptor(item.label)}</p>
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.12em]">{statusLabels[item.status]}</span>
                   </div>
-                  <p className="mt-1 text-xs leading-5 text-[color:var(--muted)]">{item.description}</p>
+                  <p className="mt-1 text-xs leading-5 text-[color:var(--muted)]">{formatRuleDecisionDescription(item.description)}</p>
                 </div>
               ))}
             </div>

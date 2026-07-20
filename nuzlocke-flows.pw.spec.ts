@@ -35,8 +35,8 @@ test.describe("Nuzlocke creation smoke tests", () => {
 
   test("creates a custom-mode run from the player builder", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("button", { name: /Custom Composez/ })).toBeVisible();
-    await page.getByRole("button", { name: /Custom Composez/ }).click();
+    await expect(page.getByRole("button", { name: /Personnalisé Composez/ })).toBeVisible();
+    await page.getByRole("button", { name: /Personnalisé Composez/ }).click();
     await expect(page.getByText("Règles personnalisées")).toBeVisible();
     await page.getByLabel("Interdire les objets en combat").check();
     await page.getByRole("button", { name: /Créer mon Nuzlocke/ }).click();
@@ -44,7 +44,7 @@ test.describe("Nuzlocke creation smoke tests", () => {
     await expect(page.getByText("Votre Nuzlocke est prêt")).toBeVisible();
     await page.getByRole("link", { name: /Rejoindre l’aventure/ }).click();
     await expect(page).toHaveURL(/\/run\/[A-HJ-NP-Z2-9]{6}/);
-    await expect(page.locator("span").filter({ hasText: /^Custom$/ }).first()).toBeVisible();
+    await expect(page.locator("span").filter({ hasText: /^Personnalisé$/ }).first()).toBeVisible();
     await expect(page.getByText("Sans objet en combat")).toBeVisible();
   });
 
@@ -162,7 +162,7 @@ test.describe("Nuzlocke creation smoke tests", () => {
 
   test("manages a browser-local template from the player builder", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: /Custom Composez/ }).click();
+    await page.getByRole("button", { name: /Personnalisé Composez/ }).click();
     await page.getByLabel("Interdire les objets en combat").check();
     await page.getByPlaceholder("Nom du template").fill("Local smoke template");
     await page.getByPlaceholder("Description optionnelle").fill("Template local Playwright.");
@@ -200,8 +200,8 @@ test.describe("Nuzlocke creation smoke tests", () => {
 
   test("previews Hardcore blocking rules before creation", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: /Hardcore Level caps/ }).click();
-    await expect(page.getByText("Override requis")).toBeVisible();
+    await page.getByRole("button", { name: /Hardcore Limites strictes/ }).click();
+    await expect(page.getByText("Exception requise")).toBeVisible();
     await expect(page.getByText("Objets en combat", { exact: true })).toBeVisible();
     await expect(page.getByText("Bloquant").first()).toBeVisible();
   });
@@ -290,7 +290,7 @@ test.describe("Nuzlocke creation smoke tests", () => {
     await page.getByRole("spinbutton", { name: "Niveau" }).fill("99");
     await page.getByRole("button", { name: "Enregistrer" }).click();
 
-    await expect(page.getByText("Override requis")).toBeVisible();
+    await expect(page.getByText("Exception requise")).toBeVisible();
     await page.getByLabel("Raison de l’exception").fill("Smoke test override pour vérifier l’audit.");
     await page.getByRole("button", { name: "Forcer avec cette raison" }).click();
 

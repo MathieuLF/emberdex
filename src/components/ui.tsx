@@ -15,7 +15,7 @@ export function Card({ className, children }: BaseProps) {
   return (
     <section
       className={cn(
-        "rounded-[1.5rem] border border-[color:var(--line)] bg-[color:var(--surface)] shadow-[var(--shadow)] backdrop-blur-xl",
+        "rounded-2xl border border-[color:var(--line)] bg-[color:var(--surface)] shadow-[var(--shadow)] backdrop-blur-xl",
         className
       )}
     >
@@ -28,7 +28,7 @@ export function InnerCard({ className, children }: BaseProps) {
   return (
     <div
       className={cn(
-        "rounded-2xl border border-[color:var(--line)] bg-[color:var(--surface-strong)]",
+        "rounded-xl border border-[color:var(--line)] bg-[color:var(--surface-strong)]",
         className
       )}
     >
@@ -53,12 +53,12 @@ export function SectionHeading({
     <div className={cn("flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end", className)}>
       <div className="space-y-2">
         {eyebrow ? (
-          <p className="text-[11px] uppercase tracking-[0.32em] text-[color:var(--muted)]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[color:var(--muted)]">
             {eyebrow}
           </p>
         ) : null}
         <div className="space-y-1">
-          <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold tracking-tight text-[color:var(--text)]">{title}</h2>
+          <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[color:var(--text)]">{title}</h2>
           {description ? (
             <p className="max-w-2xl text-sm leading-6 text-[color:var(--muted)]">
               {description}
@@ -74,13 +74,26 @@ export function SectionHeading({
 export function Pill({
   className,
   children,
+  tone = "default",
 }: BaseProps & {
   tone?: "default" | "accent" | "success" | "warning" | "danger";
 }) {
+  const toneClass =
+    tone === "accent"
+      ? "border-[color:var(--accent)]/25 bg-[color:var(--accent-soft)] text-[color:var(--accent)]"
+      : tone === "success"
+        ? "border-[color:var(--success)]/25 bg-[color:var(--success)]/10 text-[color:var(--success)]"
+        : tone === "warning"
+          ? "border-[color:var(--warning)]/25 bg-[color:var(--warning)]/10 text-[color:var(--warning)]"
+          : tone === "danger"
+            ? "border-[color:var(--danger)]/30 bg-[color:var(--danger)]/10 text-[color:var(--danger)]"
+            : "border-[color:var(--line)] bg-white/[0.025] text-[color:var(--muted)]";
+
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full border border-[color:var(--line)] bg-white/[0.025] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.16em] text-[color:var(--muted)]",
+        "inline-flex items-center rounded-md border px-2.5 py-1 text-[11px] font-semibold leading-none",
+        toneClass,
         className
       )}
     >
@@ -112,8 +125,8 @@ export function StatCard({
             : "text-[color:var(--text)]";
 
   return (
-    <div className="rounded-2xl border border-[color:var(--line)] bg-[color:var(--surface)] p-4 shadow-[var(--shadow)]">
-      <p className="text-[11px] uppercase tracking-[0.28em] text-[color:var(--muted)]">
+    <div className="rounded-xl border border-[color:var(--line)] bg-[color:var(--surface)] p-4 shadow-[var(--shadow)]">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--muted)]">
         {label}
       </p>
       <div className={cn("mt-3 text-2xl font-semibold tabular-nums", toneClass)}>
@@ -127,7 +140,7 @@ export function StatCard({
 }
 
 const fieldBase =
-  "min-h-12 w-full rounded-xl border border-[color:var(--line)] bg-[color:var(--surface-strong)] px-4 py-3 text-sm text-[color:var(--text)] outline-none transition placeholder:text-[color:var(--muted)] focus:border-[color:var(--accent)] focus:ring-2 focus:ring-[color:var(--accent-soft)]";
+  "min-h-12 w-full rounded-lg border border-[color:var(--line)] bg-[color:var(--surface-strong)] px-4 py-3 text-sm text-[color:var(--text)] outline-none transition placeholder:text-[color:var(--muted)] focus:border-[color:var(--accent)] focus:ring-2 focus:ring-[color:var(--accent-soft)]";
 
 export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} className={cn(fieldBase, className)} />;
@@ -161,7 +174,7 @@ export function Button({
     <button
       {...props}
       className={cn(
-        "inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
+        "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border px-4 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-px disabled:pointer-events-none disabled:opacity-50",
         variantClass,
         className
       )}
